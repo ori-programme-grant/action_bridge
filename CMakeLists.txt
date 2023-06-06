@@ -39,13 +39,13 @@ ament_export_include_directories(include)
 
 include_directories(include)
 
-add_executable(action_bridge_follow_joint_trajectory_node
-    "src/action_bridge_follow_joint_trajectory.cpp"
-)
-ament_target_dependencies(action_bridge_follow_joint_trajectory_node
-    "ros1_roscpp" "ros1_actionlib" "ros1_control_msgs"
-    "rclcpp" "rclcpp_action" "control_msgs"
-)
+#add_executable(action_bridge_follow_joint_trajectory_node
+#    "src/action_bridge_follow_joint_trajectory.cpp"
+#)
+#ament_target_dependencies(action_bridge_follow_joint_trajectory_node
+#    "ros1_roscpp" "ros1_actionlib" "ros1_control_msgs"
+#    "rclcpp" "rclcpp_action" "control_msgs"
+#)
 
 add_executable(action_bridge_fibonacci_node
     "src/action_bridge_fibonacci.cpp"
@@ -55,7 +55,7 @@ ament_target_dependencies(action_bridge_fibonacci_node
     "rclcpp" "rclcpp_action" "example_interfaces"
 )
 
-install(TARGETS action_bridge_follow_joint_trajectory_node action_bridge_fibonacci_node
+install(TARGETS action_bridge_fibonacci_node
     DESTINATION lib/${PROJECT_NAME}
 )
 

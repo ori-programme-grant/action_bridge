@@ -117,8 +117,10 @@ private:
   using ROS2Goal = typename ROS2_T::Goal;
   using ROS2Feedback = typename ROS2_T::Feedback;
   using ROS2Result = typename ROS2_T::Result;
-  using ROS2GoalHandle = typename rclcpp_action::ClientGoalHandle<ROS2_T>::SharedPtr;
+  using ROS2ClientGoalHandle = typename rclcpp_action::ClientGoalHandle<ROS2_T>::SharedPtr;
   using ROS2ClientSharedPtr = typename rclcpp_action::Client<ROS2_T>::SharedPtr;
+  using ROS2SendGoalOptions = typename rclcpp_action::Client<ROS2_T>::SendGoalOptions;
+  using ROS2GoalHandle = typename rclcpp_action::Client<ROS2_T>::GoalHandle::SharedPtr;
 
   class GoalHandler
   {
@@ -143,36 +145,42 @@ private:
         return;
       }
 
-      // send goal to ROS2 server, set-up feedback
-      auto gh2_future = client_->async_send_goal(goal2,
-          [this](ROS2GoalHandle, auto feedback2) {
-            ROS1Feedback feedback1;
-            translate_feedback_2_to_1(feedback1, *feedback2);
-            gh1_.publishFeedback(feedback1);
+      std::shared_future<ROS2ClientGoalHandle> gh2_future;
+      auto send_goal_ops = ROS2SendGoalOptions();
+      send_goal_ops.goal_response_callback =
+        [this, &gh2_future](std::shared_future<ROS2GoalHandle> gh2) mutable {
+          auto goal_handle = gh2_future.get();
+          if (!goal_handle) {
+            gh1_.setRejected();          // goal was not accepted by remote server
+            return;
           }
-      );
 
-      auto goal_handle = gh2_future.get();
-      if (!goal_handle) {
-        gh1_.setRejected(); // goal was not accepted by remote server
-        return;
-      }
-      gh1_.setAccepted();
+          gh1_.setAccepted();
 
-      {
-        std::lock_guard<std::mutex> lock(mutex_);
-        gh2_ = goal_handle;
+          {
+            std::lock_guard<std::mutex> lock(mutex_);
+            gh2_ = goal_handle;
 
-        if (canceled_) { // cancel was called in between
-          auto fut = client_->async_cancel_goal(gh2_);
-        }
-      }
+            if (canceled_) {          // cancel was called in between
+              auto fut = client_->async_cancel_goal(gh2_);
+            }
+          }
+        };
 
-      // wait for result and forward it to the ROS1 client
-      auto res2 = client_->async_get_result(gh2_).get();
+      send_goal_ops.feedback_callback = [this](ROS2GoalHandle, auto feedback2) mutable {
+          ROS1Feedback feedback1;
+          translate_feedback_2_to_1(feedback1, *feedback2);
+          gh1_.publishFeedback(feedback1);
+        };
+
+      // send goal to ROS2 server, set-up feedback
+      gh2_future = client_->async_send_goal(goal2, send_goal_ops);
+
+      auto future_result = client_->async_get_result(gh2_future.get());
+      auto res2 = future_result.get();
 
       ROS1Result res1;
-      translate_result_2_to_1(res1, *res2.response);
+      translate_result_2_to_1(res1, *(res2.result));
 
       std::lock_guard<std::mutex> lock(mutex_);
       if (res2.code == rclcpp_action::ResultCode::SUCCEEDED) {
