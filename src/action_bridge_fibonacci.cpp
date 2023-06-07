@@ -53,5 +53,5 @@ void FibonacciActionBridge::translate_feedback_2_to_1(
 
 int main(int argc, char * argv[])
 {
-  return FibonacciActionBridge::main("fibonacci", argc, argv);
+  return FibonacciActionBridge::main("fibonacci", "fibonacci", argc, argv);
 }

@@ -61,5 +61,5 @@ void MoveBaseActionBridge::translate_feedback_2_to_1(
 
 int main(int argc, char * argv[])
 {
-  return MoveBaseActionBridge::main("move_base", argc, argv);
+  return MoveBaseActionBridge::main("move_base", "navigate_to_pose", argc, argv);
 }

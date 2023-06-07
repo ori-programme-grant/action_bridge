@@ -44,15 +44,16 @@ public:
   ActionBridge(
     ros::NodeHandle ros1_node,
     rclcpp::Node::SharedPtr ros2_node,
-    const std::string action_name)
+    const std::string ros1_action_name,
+    const std::string ros2_action_name)
   : ros1_node_(ros1_node), ros2_node_(ros2_node),
-    server_(ros1_node, action_name,
+    server_(ros1_node, ros1_action_name,
       std::bind(&ActionBridge::goal_cb, this, std::placeholders::_1),
       std::bind(&ActionBridge::cancel_cb, this, std::placeholders::_1),
       false)
   {
     server_.start();
-    client_ = rclcpp_action::create_client<ROS2_T>(ros2_node, action_name);
+    client_ = rclcpp_action::create_client<ROS2_T>(ros2_node, ros2_action_name);
   }
 
   void cancel_cb(ROS1GoalHandle gh1)
@@ -87,19 +88,22 @@ public:
       }).detach();
   }
 
-  static int main(const std::string & action_name, int argc, char * argv[])
+  static int main(const std::string & ros1_action_name,const std::string & ros2_action_name, int argc, char * argv[])
   {
-    std::string node_name = "action_bridge_" + action_name;
-    std::replace(node_name.begin(), node_name.end(), '/', '_');
+    std::string ros1_node_name = "action_bridge_" + ros1_action_name;
+    std::replace(ros1_node_name.begin(), ros1_node_name.end(), '/', '_');
+
+    std::string ros2_node_name = "action_bridge_" + ros2_action_name;
+    std::replace(ros2_node_name.begin(), ros2_node_name.end(), '/', '_');
     // ROS 1 node
-    ros::init(argc, argv, node_name);
+    ros::init(argc, argv, ros1_node_name);
     ros::NodeHandle ros1_node;
 
     // ROS 2 node
     rclcpp::init(argc, argv);
-    auto ros2_node = rclcpp::Node::make_shared(node_name);
+    auto ros2_node = rclcpp::Node::make_shared(ros2_node_name);
 
-    ActionBridge<ROS1_T, ROS2_T> action_bridge(ros1_node, ros2_node, action_name);
+    ActionBridge<ROS1_T, ROS2_T> action_bridge(ros1_node, ros2_node, ros1_action_name, ros2_action_name);
 
     // // ROS 1 asynchronous spinner
     ros::AsyncSpinner async_spinner(0);
