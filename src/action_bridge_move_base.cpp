@@ -12,7 +12,7 @@
 // include ROS 2
 #include <nav2_msgs/action/navigate_to_pose.hpp>
 
-using MoveBaseActionBridge = ActionBridge<move_base_msgs::MoveBaseAction,
+using MoveBaseActionBridge = ActionBridge_1_2<move_base_msgs::MoveBaseAction,
     nav2_msgs::action::NavigateToPose>;
 
 template<>

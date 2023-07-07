@@ -22,6 +22,7 @@ find_package(rclcpp_action REQUIRED)
 
 find_package(example_interfaces REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(stretch_topological_navigation_msgs REQUIRED)
 
 # find ROS 1 packages
 include(cmake/find_ros1_package.cmake)
@@ -33,6 +34,7 @@ find_ros1_package(actionlib REQUIRED)
 
 find_ros1_package(actionlib_tutorials REQUIRED)
 find_ros1_package(move_base_msgs REQUIRED)
+find_ros1_package(ori_topological_navigation_msgs REQUIRED)
 
 
 ament_export_include_directories(include)
@@ -47,13 +49,13 @@ include_directories(include)
 #    "rclcpp" "rclcpp_action" "control_msgs"
 #)
 
-add_executable(action_bridge_fibonacci_node
-    "src/action_bridge_fibonacci.cpp"
-)
-ament_target_dependencies(action_bridge_fibonacci_node
-    "ros1_roscpp" "ros1_actionlib" "ros1_actionlib_tutorials"
-    "rclcpp" "rclcpp_action" "example_interfaces"
-)
+#add_executable(action_bridge_fibonacci_node
+#    "src/action_bridge_fibonacci.cpp"
+#)
+#ament_target_dependencies(action_bridge_fibonacci_node
+#    "ros1_roscpp" "ros1_actionlib" "ros1_actionlib_tutorials"
+#    "rclcpp" "rclcpp_action" "example_interfaces"
+#)
 
 add_executable(action_bridge_move_base_node
     "src/action_bridge_move_base.cpp"
@@ -63,10 +65,13 @@ ament_target_dependencies(action_bridge_move_base_node
     "rclcpp" "rclcpp_action" "example_interfaces" "nav2_msgs"
 )
 
-install(TARGETS action_bridge_fibonacci_node
-    DESTINATION lib/${PROJECT_NAME}
+add_executable(action_bridge_topological_navigation_node
+    "src/action_bridge_topological_navigation.cpp"
 )
-
+ament_target_dependencies(action_bridge_topological_navigation_node
+    "ros1_roscpp" "ros1_actionlib" "ros1_actionlib_tutorials" "ros1_ori_topological_navigation_msgs"
+    "rclcpp" "rclcpp_action" "example_interfaces" "stretch_topological_navigation_msgs"
+)
 
 install(TARGETS action_bridge_move_base_node
     DESTINATION lib/${PROJECT_NAME}
