@@ -73,7 +73,7 @@ ament_target_dependencies(action_bridge_topological_navigation_node
     "rclcpp" "rclcpp_action" "example_interfaces" "stretch_topological_navigation_msgs"
 )
 
-install(TARGETS action_bridge_move_base_node
+install(TARGETS action_bridge_move_base_node action_bridge_topological_navigation_node
     DESTINATION lib/${PROJECT_NAME}
 )
 

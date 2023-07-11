@@ -40,5 +40,5 @@ void TopoNavBridge::translate_feedback_1_to_2(
 
 int main(int argc, char * argv[])
 {
-  return TopoNavBridge::main("", "", argc, argv);
+  return TopoNavBridge::main("traverse_to_node", "traverse_to_node", argc, argv);
 }
