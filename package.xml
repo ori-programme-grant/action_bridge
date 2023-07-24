@@ -3,19 +3,27 @@
 <package format="3">
   <name>action_bridge</name>
   <version>0.1.0</version>
-  <description>Example action bridges for FibonacciAction and FollowJointTrajectoryAction</description>
+  <description>Topological navigation action bridge</description>
 
-  <maintainer email="harshavardhan.deshpande@ipa.fraunhofer.de">Harshavardhan Deshpande</maintainer>
+  <maintainer email="benoit@robots.ox.ac.uk">Benoit Casseau</maintainer>
 
   <license>Apache License 2.0</license>
 
-  <author email="harshavardhan.deshpande@ipa.fraunhofer.de">Harshavardhan Deshpande</author>
-  <author email="mathias.luedtke@ipa.fraunhofer.de">Mathias Lüdtke</author>
+  <author email="benoit@robots.ox.ac.uk">Benoit Casseau</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- TODO: state ROS1 and ROS2 dependencies -->
-  <depend>control_msgs</depend>
+  <!-- ROS 2 dependencies -->
+  <depend>nav2_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>stretch_topological_navigation_msgs</depend>
+
+  <!-- ROS 1 dependencies -->
+  <depend>actionlib</depend>
+  <depend>move_base_msgs</depend>
+  <depend>ori_topological_navigation_msgs</depend>
+  <depend>roscpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
