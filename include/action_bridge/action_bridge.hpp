@@ -97,13 +97,14 @@ public:
 
     std::string ros2_node_name = "action_bridge_" + ros2_action_name;
     std::replace(ros2_node_name.begin(), ros2_node_name.end(), '/', '_');
-    // ROS 1 node
-    ros::init(argc, argv, ros1_node_name);
-    ros::NodeHandle ros1_node;
 
     // ROS 2 node
     rclcpp::init(argc, argv);
     auto ros2_node = rclcpp::Node::make_shared(ros2_node_name);
+
+    // ROS 1 node
+    ros::init(argc, argv, ros1_node_name);
+    ros::NodeHandle ros1_node;
 
     ActionBridge_1_2<ROS1_T, ROS2_T> action_bridge(ros1_node, ros2_node, ros1_action_name, ros2_action_name);
 
@@ -330,16 +331,16 @@ public:
   {
     std::string ros1_node_name = "action_bridge_" + ros1_action_name;
     std::replace(ros1_node_name.begin(), ros1_node_name.end(), '/', '_');
-
     std::string ros2_node_name = "action_bridge_" + ros2_action_name;
     std::replace(ros2_node_name.begin(), ros2_node_name.end(), '/', '_');
-    // ROS 1 node
-    ros::init(argc, argv, ros1_node_name);
-    ros::NodeHandle ros1_node;
 
     // ROS 2 node
     rclcpp::init(argc, argv);
     auto ros2_node = rclcpp::Node::make_shared(ros2_node_name);
+
+    // ROS 1 node
+    ros::init(argc, argv, ros1_node_name);
+    ros::NodeHandle ros1_node;
 
     ActionBridge_2_1<ROS1_T, ROS2_T> action_bridge(ros1_node, ros2_node, ros1_action_name, ros2_action_name);
 
