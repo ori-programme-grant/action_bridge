@@ -103,7 +103,7 @@ public:
     auto ros2_node = rclcpp::Node::make_shared(ros2_node_name);
 
     // ROS 1 node
-    ros::init(argc, argv, ros1_node_name);
+    ros::init(argc, argv, ros1_node_name, ros::init_options::AnonymousName);
     ros::NodeHandle ros1_node;
 
     ActionBridge_1_2<ROS1_T, ROS2_T> action_bridge(ros1_node, ros2_node, ros1_action_name, ros2_action_name);

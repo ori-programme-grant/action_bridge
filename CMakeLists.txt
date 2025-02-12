@@ -43,6 +43,14 @@ ament_target_dependencies(action_bridge_move_base_node
     "rclcpp" "rclcpp_action" "nav2_msgs"
 )
 
+add_executable(action_bridge_door_pass_node
+    "src/action_bridge_door_pass.cpp"
+)
+ament_target_dependencies(action_bridge_door_pass_node
+    "ros1_roscpp" "ros1_actionlib" "ros1_move_base_msgs"
+    "rclcpp" "rclcpp_action" "nav2_msgs"
+)
+
 add_executable(action_bridge_topological_navigation_node
     "src/action_bridge_topological_navigation.cpp"
 )
@@ -51,7 +59,7 @@ ament_target_dependencies(action_bridge_topological_navigation_node
     "rclcpp" "rclcpp_action" "stretch_topological_navigation_msgs"
 )
 
-install(TARGETS action_bridge_move_base_node action_bridge_topological_navigation_node
+install(TARGETS action_bridge_move_base_node action_bridge_door_pass_node action_bridge_topological_navigation_node
     DESTINATION lib/${PROJECT_NAME}
 )
 
